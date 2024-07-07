@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lucasabreu.simpletodo.models.User;
-import com.lucasabreu.simpletodo.repositories.TaskRepository;
 import com.lucasabreu.simpletodo.repositories.UserRepository;
 
 @Service
@@ -15,9 +14,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private TaskRepository taskRepository;
 
     public User findById(Long id) {
         Optional<User> user = this.userRepository.findById(id);
@@ -31,7 +27,7 @@ public class UserService {
     public User create(User obj) {
         obj.setId(null);
         obj = this.userRepository.save(obj);
-        this.taskRepository.saveAll(obj.getTasks());
+        
         return obj;
     }
 
@@ -39,8 +35,9 @@ public class UserService {
     public User update(User obj) {
         User newObj = findById(obj.getId());
         newObj.setPassword(obj.getPassword());
+        newObj = this.userRepository.save(newObj);
 
-        return this.userRepository.save(newObj);
+        return newObj;
     }
 
     public void delete(Long id) {
