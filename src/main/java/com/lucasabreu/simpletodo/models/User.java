@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -23,22 +24,25 @@ import jakarta.validation.constraints.Size;
 public class User {
     public static final String TABLE_NAME = "user";
 
+    public interface CreateUser {}
+    public interface UpdateUser {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private Long id;
 
     @Column(name = "username", unique = true, length = 100, nullable = false)
-    @NotNull
-    @NotEmpty
-    @Size(min = 8, max = 100)
+    @NotNull(groups = CreateUser.class)
+    @NotEmpty(groups = CreateUser.class)
+    @Size(groups = CreateUser.class, min = 8, max = 100)
     private String username;
 
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password", length = 50, nullable = false)
-    @NotNull
-    @NotEmpty
-    @Size(min = 8, max = 50)
+    @NotNull(groups = {CreateUser.class, UpdateUser.class})
+    @NotEmpty(groups = {CreateUser.class, UpdateUser.class})
+    @Size(groups = {CreateUser.class, UpdateUser.class}, min = 8, max = 50)
     private String password;
 
     @OneToMany(mappedBy = "user")
@@ -77,6 +81,7 @@ public class User {
         this.password = password;
     }
 
+    @JsonIgnore
     public List<Task> getTasks() {
         return this.tasks;
     }
