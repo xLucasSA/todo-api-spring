@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
-@RestController("/user")
+@RestController
+@RequestMapping("/user")
 @Validated
 public class UserController {
 
@@ -40,7 +42,6 @@ public class UserController {
     @PostMapping
     @Validated(CreateUser.class)
     public ResponseEntity<Void> create(@Valid @RequestBody User obj) {
-        obj.setId(null);
         this.userService.create(obj);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -58,7 +59,6 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    @Validated
     public ResponseEntity<Void> delete(Long id) {
         this.userService.delete(id);
 
