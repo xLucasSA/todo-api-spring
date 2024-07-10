@@ -19,7 +19,7 @@ import jakarta.validation.constraints.Size;
 public class Task {
     public static final String TABLE_NAME = "Tasks";
 
-    public interface CreatePassword {}
+    public interface CreateDescription {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +27,8 @@ public class Task {
     private Long id;
 
     @Column(name = "description", nullable = false, length = 200)
-    @NotNull(groups = CreatePassword.class)
-    @NotEmpty(groups = CreatePassword.class)
+    @NotNull(groups = CreateDescription.class)
+    @NotEmpty(groups = CreateDescription.class)
     @Size(min = 1, max = 200)
     private String description;
 

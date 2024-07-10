@@ -1,7 +1,6 @@
 package com.lucasabreu.simpletodo.services;
 
 import java.util.Optional;
-import java.lang.annotation.Retention;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
