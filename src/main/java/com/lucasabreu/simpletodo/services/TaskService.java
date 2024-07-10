@@ -1,6 +1,8 @@
 package com.lucasabreu.simpletodo.services;
 
 import java.util.Optional;
+import java.lang.annotation.Retention;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,10 +31,15 @@ public class TaskService {
         ));
     }
 
+    public List<Task> findAllByUserId(Long userId) {
+        List<Task> tasks = this.taskRepository.findByUser_Id(userId);
+        return tasks;
+    }
+
     @Transactional
     public Task create(Task obj) {
         obj.setId(null);
-        this.userService.findById(obj.getId());
+        this.userService.findById(obj.getUser().getId());
         obj = this.taskRepository.save(obj);
 
         return obj;
